@@ -18,7 +18,7 @@ jobs:
       - name: Check tags
         id: list-tags
         run: |
-          echo "tags={\"include\":[{\"version\":[\"a\",\"b\",\"c\"]}]}" >> $GITHUB_OUTPUT
+          echo "tags={\"include\":[{\"version\":\"a\"},{\"version\":"\"b\"},{\"version\":\"c\"}]}" >> $GITHUB_OUTPUT
 
   push-tag:
     runs-on: ubuntu-latest
