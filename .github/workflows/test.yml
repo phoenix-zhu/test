@@ -3,7 +3,7 @@ name: test
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -22,16 +22,14 @@ jobs:
           do
             versions+=("$i")
           done
-          printf -v joined '%s, ' "${versions[@]}"
-          echo "tags={\"include\":[{\"tag\":${joined%, }}]}" >> $GITHUB_OUTPUT
-
+          echo "tags=[${versions[@]}]" >> $GITHUB_OUTPUT
 
   push-tag:
     runs-on: ubuntu-latest
     needs: [load-tag]
     strategy:
       matrix: 
-        tag: ${{ fromJSON(needs.load-tag.outputs.tags.include.tag) }}
+        tag: ${{ needs.load-tag.outputs.tags }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
