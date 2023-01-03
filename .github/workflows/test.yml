@@ -22,7 +22,7 @@ jobs:
           do
             versions+=("$i")
           done
-          echo "tags=[${versions[@]}]" >> $GITHUB_OUTPUT
+          echo "tags={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
 
   push-tag:
     runs-on: ubuntu-latest
