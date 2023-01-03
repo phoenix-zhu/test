@@ -1,0 +1,41 @@
+name: test
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  load-tag:
+    runs-on: ubuntu-latest
+    name: Load tags
+    outputs:
+      tags: ${{ steps.list-tags.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Check tags
+        id: list-tags
+        run: |
+          for i in "a b c"
+          do
+            versions+=("$i")
+          done
+          printf -v joined '%s, ' "${versions[@]}"
+          echo "tags={\"include\":[{\"tag\":${joined%, }}]}" >> $GITHUB_OUTPUT
+
+
+  push-tag:
+    runs-on: ubuntu-latest
+    needs: [load-tag]
+    strategy:
+      matrix: 
+        tag: ${{ fromJSON(needs.load-tag.outputs.tags.include.tag) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Push tag
+        if: steps.checkTag.outputs.exists == 'false'
+        run: |
+          echo ${{ matrix.tag }}
