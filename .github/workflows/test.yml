@@ -18,11 +18,7 @@ jobs:
       - name: Check tags
         id: list-tags
         run: |
-          for i in "a b c"
-          do
-            versions+=("$i")
-          done
-          echo "tags={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+          echo "tags={\"include\":[{\"version\":[\"a\",\"b\",\"c\"]}]}" >> $GITHUB_OUTPUT
 
   push-tag:
     runs-on: ubuntu-latest
@@ -33,6 +29,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Push tag
-        if: steps.checkTag.outputs.exists == 'false'
         run: |
           echo ${{ matrix.tag }}
